@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChoreiBook — As Olimpíadas do Sofrimento Cotidiano</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😭</text></svg>">
+</head>
+<body class="dark-theme">
+  <!-- Chuva de Lágrimas (Canvas / Container) -->
+  <div id="tear-rain-container" class="tear-rain hidden"></div>
+
+  <!-- Alerta Flutuante / Toast de Notificação -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Barra de Notificação Dramática Topo -->
+  <div class="breaking-news-bar">
+    <div class="breaking-tag">🚨 PLANTÃO DA SOFRÊNCIA</div>
+    <div class="breaking-marquee">
+      <span id="breaking-text">Hoje às 08:34: Alguém pisou numa poça com meia limpa • Taxa de café frio no trampo sobe 45% • Saldo do mês durou incríveis 36 minutos • 4.290 boletos choraram sozinhos na gaveta</span>
+    </div>
+  </div>
+
+  <!-- Cabeçalho Principal (Navbar) -->
+  <header class="main-header">
+    <div class="header-container">
+      
+      <!-- Logo & Slogan -->
+      <div class="brand-group">
+        <a href="#" class="brand-logo">
+          <div class="logo-icon-wrap">
+            <span class="logo-emoji">😭</span>
+            <span class="logo-tear">💧</span>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">Chorei<span class="brand-highlight">Book</span></span>
+            <span class="brand-badge">BETA DA DOR</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Barra de Busca de Desgraça -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Buscar por 'chefe', 'fatura', 'humilhação'..." autocomplete="off">
+        <button class="clear-search hidden" id="clear-search" title="Limpar busca">✕</button>
+      </div>
+
+      <!-- Ações do Header -->
+      <div class="header-actions">
+        <!-- Botão Violino Triste -->
+        <button id="btn-sad-violin" class="action-btn violin-btn" title="Tocar Violino Triste (Web Audio)">
+          <span class="btn-icon">🎻</span>
+          <span class="btn-text">Trilha Triste</span>
+        </button>
+
+        <!-- Toggle Chuva de Lágrimas -->
+        <button id="btn-toggle-rain" class="action-btn" title="Ativar/Desativar Chuva de Lágrimas">
+          <span class="btn-icon">🌧️</span>
+          <span class="btn-text">Chuva</span>
+        </button>
+
+        <!-- Toggle Tema Claro/Escuro -->
+        <button id="btn-toggle-theme" class="action-btn icon-only" title="Alternar Modo Sofrimento / Ilusão">
+          <span id="theme-icon">🌙</span>
+        </button>
+
+        <!-- Botão Registrar Desgraça -->
+        <button id="btn-open-modal" class="btn-primary-glow">
+          <span class="plus-icon">+</span>
+          <span>Desabafar</span>
+        </button>
+
+        <!-- Perfil Header -->
+        <div class="user-pill" title="Seu perfil de sofredor">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=ZeCoitado&backgroundColor=1e293b" alt="Avatar" class="avatar-mini">
+          <div class="user-pill-info">
+            <span class="user-name">Zé Coitado</span>
+            <span class="user-status">Nível 4: Mártir CLT</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Layout Principal em 3 Colunas -->
+  <div class="app-layout">
+    
+    <!-- ==================== COLUNA ESQUERDA: MENU & PERFIL ==================== -->
+    <aside class="sidebar-left">
+      
+      <!-- Card do Usuário / Nível de Miséria -->
+      <div class="card user-profile-card">
+        <div class="profile-banner">
+          <span class="banner-badge">🏅 Faixa Preta em Ilusão</span>
+        </div>
+        <div class="profile-content">
+          <div class="avatar-wrapper">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=ZeCoitado&backgroundColor=1e293b" alt="Seu Avatar" class="profile-avatar">
+            <span class="avatar-status-badge">💀</span>
+          </div>
+          <h3 class="profile-name">Zé Coitado <span class="verified-cry" title="Vítima Verificada">💧</span></h3>
+          <p class="profile-bio">"Tentando não surtar das 8h às 18h de segunda a sexta. Fins de semana choro no banho."</p>
+          
+          <div class="misery-meter-box">
+            <div class="meter-label">
+              <span>Nível de Desespero:</span>
+              <strong id="user-misery-pct">92% Crítico</strong>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill" style="width: 92%;"></div>
+            </div>
+          </div>
+
+          <div class="user-stats-row">
+            <div class="stat-item">
+              <span class="stat-num" id="my-tears-count">3.420</span>
+              <span class="stat-sub">Lágrimas Ganhas</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-num">#12</span>
+              <span class="stat-sub">No Ranking Geral</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros de Categorias do Sofrimento -->
+      <div class="card categories-card">
+        <div class="card-header-clean">
+          <h4>Departamentos da Dor</h4>
+          <span class="badge-count" id="active-category-label">Todos</span>
+        </div>
+        <nav class="category-list">
+          <button class="cat-btn active" data-cat="all">
+            <span class="cat-icon">🌐</span>
+            <span class="cat-name">Todas as Desgraças</span>
+            <span class="cat-counter" id="count-all">8</span>
+          </button>
+          <button class="cat-btn" data-cat="clt">
+            <span class="cat-icon">💼</span>
+            <span class="cat-name">CLT & Escravidão</span>
+            <span class="cat-counter" id="count-clt">2</span>
+          </button>
+          <button class="cat-btn" data-cat="boletos">
+            <span class="cat-icon">💸</span>
+            <span class="cat-name">Boletos & Falência</span>
+            <span class="cat-counter" id="count-boletos">2</span>
+          </button>
+          <button class="cat-btn" data-cat="amor">
+            <span class="cat-icon">💔</span>
+            <span class="cat-name">Amor & Chifre</span>
+            <span class="cat-counter" id="count-amor">1</span>
+          </button>
+          <button class="cat-btn" data-cat="transporte">
+            <span class="cat-icon">🚌</span>
+            <span class="cat-name">Transporte Público</span>
+            <span class="cat-counter" id="count-transporte">1</span>
+          </button>
+          <button class="cat-btn" data-cat="estudante">
+            <span class="cat-icon">🎓</span>
+            <span class="cat-name">Faculdade & TCC</span>
+            <span class="cat-counter" id="count-estudante">1</span>
+          </button>
+          <button class="cat-btn" data-cat="cotidiano">
+            <span class="cat-icon">🤕</span>
+            <span class="cat-name">Maldades do Cotidiano</span>
+            <span class="cat-counter" id="count-cotidiano">1</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Gerador de Desculpas Dramáticas -->
+      <div class="card excuse-card">
+        <div class="card-header-clean">
+          <h4>🎭 Gerador de Desculpas</h4>
+        </div>
+        <p class="excuse-desc">Precisa fugir de um rolê ou reunião? Deixe o ChoreiBook inventar seu álibi trágico:</p>
+        <div class="excuse-box" id="excuse-display">
+          "Não poderei comparecer pois minha alma foi leiloada pela fatura do cartão e meu gato me julgou silenciosamente até eu travar a coluna."
+        </div>
+        <button id="btn-generate-excuse" class="btn-secondary-sm">
+          <span>🎲 Gerar Outra Desculpa</span>
+        </button>
+      </div>
+
+      <!-- Frase Desmotivacional -->
+      <div class="card demotivation-card">
+        <span class="quote-mark">“</span>
+        <p id="daily-demotivation">Se você acha que o fundo do poço é o limite, esqueceu que ainda dá pra cavar com uma colher de plástico.</p>
+        <span class="quote-author">— Filosofia ChoreiBook</span>
+      </div>
+
+    </aside>
+
+    <!-- ==================== COLUNA CENTRAL: O FEED DE LÁGRIMAS ==================== -->
+    <main class="feed-main">
+      
+      <!-- Caixa Rápida de Publicação -->
+      <div class="card quick-post-card">
+        <div class="quick-post-top">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=ZeCoitado&backgroundColor=1e293b" alt="Você" class="avatar-small">
+          <button class="quick-input-trigger" id="quick-trigger-btn">
+            Qual foi o seu maior vexame ou tragédia hoje, Zé? Desabafe aqui...
+          </button>
+        </div>
+        <div class="quick-post-features">
+          <button class="feature-tag" id="quick-tag-clt">💼 Trampo Ruim</button>
+          <button class="feature-tag" id="quick-tag-boletos">💸 Serasa Atacou</button>
+          <button class="feature-tag" id="quick-tag-amor">💔 Fui Vácuo</button>
+          <button class="feature-tag" id="quick-tag-transporte">🚌 Busão Lotado</button>
+        </div>
+      </div>
+
+      <!-- Abas de Filtro do Feed & Classificação -->
+      <div class="feed-tabs-row">
+        <div class="feed-tabs">
+          <button class="tab-btn active" data-sort="top">
+            <span>🔥 Mais Miseráveis</span>
+            <small>Top Sofrência</small>
+          </button>
+          <button class="tab-btn" data-sort="newest">
+            <span>🕒 Dor Fresca</span>
+            <small>Recentes</small>
+          </button>
+          <button class="tab-btn" data-sort="chaos">
+            <span>💀 Fim dos Tempos</span>
+            <small>Nível 10/10</small>
+          </button>
+        </div>
+
+        <div class="feed-sort-summary">
+          <span id="posts-counter-text">Exibindo <strong>8</strong> relatos trágicos</span>
+        </div>
+      </div>
+
+      <!-- Lista de Posts do Feed -->
+      <div id="posts-feed" class="posts-stream">
+        <!-- Renderizado dinamicamente via JS com dados ricos -->
+      </div>
+
+    </main>
+
+    <!-- ==================== COLUNA DIREITA: RANKINGS & DUELOS ==================== -->
+    <aside class="sidebar-right">
+      
+      <!-- Pódio / Olimpíadas da Sofrência -->
+      <div class="card leaderboard-card">
+        <div class="leaderboard-header">
+          <div class="trophy-badge">🏆</div>
+          <div>
+            <h3>Olimpíadas da Sofrência</h3>
+            <p>Quem está ganhando o troféu coitado da semana?</p>
+          </div>
+        </div>
+
+        <!-- Pódio Visual Top 3 -->
+        <div class="podium-grid">
+          
+          <!-- 2º Lugar -->
+          <div class="podium-step step-2" id="podium-second">
+            <div class="podium-avatar-wrap">
+              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=DonaSandra&backgroundColor=475569" alt="Dona Sandra" class="podium-avatar">
+              <span class="medal-tag medal-silver">🥈 2º</span>
+            </div>
+            <div class="podium-info">
+              <strong class="podium-name">Dona Sandra</strong>
+              <span class="podium-tears" id="podium-silver-tears">2.410 💧</span>
+              <span class="podium-motto">"Caiu o pudim de domingo na terra"</span>
+            </div>
+          </div>
+
+          <!-- 1º Lugar (Campeão da Miséria) -->
+          <div class="podium-step step-1" id="podium-first">
+            <div class="crown-badge">👑</div>
+            <div class="podium-avatar-wrap">
+              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=MarquinhoCLT&backgroundColor=0284c7" alt="Marquinho CLT" class="podium-avatar avatar-gold">
+              <span class="medal-tag medal-gold">🥇 1º</span>
+            </div>
+            <div class="podium-info">
+              <strong class="podium-name">Marquinho CLT</strong>
+              <span class="podium-tears highlight-tears" id="podium-gold-tears">3.120 💧</span>
+              <span class="podium-motto">"14h de turno + pizza virada no chão"</span>
+            </div>
+          </div>
+
+          <!-- 3º Lugar -->
+          <div class="podium-step step-3" id="podium-third">
+            <div class="podium-avatar-wrap">
+              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=PedrinhoDev&backgroundColor=334155" alt="Pedrinho Dev" class="podium-avatar">
+              <span class="medal-tag medal-bronze">🥉 3º</span>
+            </div>
+            <div class="podium-info">
+              <strong class="podium-name">Pedrinho Dev</strong>
+              <span class="podium-tears" id="podium-bronze-tears">1.980 💧</span>
+              <span class="podium-motto">"Deploy na sexta + AWS caiu"</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Ranking Geral Lista 4º e 5º -->
+        <div class="ranking-sublist" id="ranking-sublist">
+          <!-- Renderizado via JS -->
+        </div>
+
+        <div class="ranking-footer">
+          <small>⚡ Atualizado em tempo real conforme as reações entram!</small>
+        </div>
+      </div>
+
+      <!-- X1 da Desgraça (Duelo do Dia) -->
+      <div class="card duel-card">
+        <div class="duel-header">
+          <span class="duel-icon">⚔️</span>
+          <div>
+            <h4>X1 da Desgraça</h4>
+            <span class="duel-sub">Qual pesadelo é pior? Vote para desempatar:</span>
+          </div>
+        </div>
+
+        <div class="duel-container" id="duel-box">
+          <div class="duel-option" id="duel-opt-a" onclick="window.choreiApp.voteDuel('a')">
+            <div class="duel-badge">OPÇÃO A</div>
+            <p class="duel-text">Pisar numa poça d'água usando meia limpa novinha no primeiro passo do dia</p>
+            <div class="duel-bar-wrap">
+              <div class="duel-bar" id="duel-bar-a" style="width: 50%;"></div>
+              <span class="duel-pct" id="duel-pct-a">50%</span>
+            </div>
+            <span class="duel-vote-count" id="duel-count-a">1.240 votos</span>
+          </div>
+
+          <div class="duel-vs">VS</div>
+
+          <div class="duel-option" id="duel-opt-b" onclick="window.choreiApp.voteDuel('b')">
+            <div class="duel-badge">OPÇÃO B</div>
+            <p class="duel-text">Celular descarregar com 1% de bateria na chuva enquanto você espera o Uber</p>
+            <div class="duel-bar-wrap">
+              <div class="duel-bar" id="duel-bar-b" style="width: 50%;"></div>
+              <span class="duel-pct" id="duel-pct-b">50%</span>
+            </div>
+            <span class="duel-vote-count" id="duel-count-b">1.240 votos</span>
+          </div>
+        </div>
+        <p class="duel-feedback" id="duel-feedback">Toque em um para registrar seu voto de solidariedade!</p>
+      </div>
+
+      <!-- Medidor Rápido / Calculadora de Sofrência -->
+      <div class="card calc-card">
+        <div class="card-header-clean">
+          <h4>🧮 Termômetro da Ruindade</h4>
+        </div>
+        <p class="calc-desc">Descubra sua pontuação oficial na Escala Richter do Fracasso:</p>
+        
+        <form id="misery-calculator-form" onsubmit="event.preventDefault(); window.choreiApp.calculateMisery();">
+          <div class="form-group-sm">
+            <label>1. Como está sua conta bancária?</label>
+            <select id="calc-q1" class="custom-select">
+              <option value="10">Positiva (Burguês safado)</option>
+              <option value="40">R$ 1,42 (Sobrevivendo por fotossíntese)</option>
+              <option value="80" selected>Negativa no cheque especial</option>
+              <option value="100">O Serasa mandou convite VIP</option>
+            </select>
+          </div>
+
+          <div class="form-group-sm">
+            <label>2. Como está sua vida amorosa?</label>
+            <select id="calc-q2" class="custom-select">
+              <option value="10">Casado e feliz</option>
+              <option value="50">Solteiro assistindo dorama</option>
+              <option value="80" selected>Fui trocado pelo primo</option>
+              <option value="100">Nem o algoritmo do Tinder me sugere</option>
+            </select>
+          </div>
+
+          <div class="form-group-sm">
+            <label>3. Sua coluna / saúde hoje:</label>
+            <select id="calc-q3" class="custom-select">
+              <option value="10">Pronto pro IronMan</option>
+              <option value="40">Estala se eu respirar fundo</option>
+              <option value="80" selected>Travei pegando o sabonete</option>
+              <option value="100">À base de Dorflex e oração</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary-sm full-width">
+            <span>Diagnosticar Minha Desgraça</span>
+          </button>
+        </form>
+
+        <div id="calc-result" class="calc-result-box hidden">
+          <div class="calc-result-header">
+            <span class="calc-emoji" id="calc-res-emoji">💀</span>
+            <div>
+              <span class="calc-badge">DIAGNÓSTICO OFICIAL</span>
+              <strong id="calc-res-title">Mártir em Estado Terminal</strong>
+            </div>
+          </div>
+          <p id="calc-res-desc">Sua taxa de sofrimento é de 85%. Recomendamos uma xícara de café frio e um abraço com distanciamento social.</p>
+        </div>
+      </div>
+
+      <!-- Rodapé Simpático -->
+      <footer class="app-footer">
+        <p>© 2026 ChoreiBook. Onde quem chora menos não mama.</p>
+        <p class="footer-links">
+          <a href="#" onclick="alert('Seus dados já estão no Serasa, nada mais a perder.'); return false;">Termos de Desespero</a> • 
+          <a href="#" onclick="alert('Não coletamos cookies, só lágrimas.'); return false;">Privacidade</a> • 
+          <a href="#" onclick="window.choreiApp.playViolinSound(); return false;">Violino de Emergência</a>
+        </p>
+      </footer>
+
+    </aside>
+
+  </div>
+
+  <!-- ==================== MODAL DE PUBLICAÇÃO DE DESGRAÇA ==================== -->
+  <div class="modal-overlay hidden" id="post-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">✍️😭</span>
+          <div>
+            <h3>Registrar Novo Perrengue</h3>
+            <p>Compita pelo troféu semanal! Quanto mais triste e verídico, mais lágrimas você ganha.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modal-close-btn" title="Fechar">✕</button>
+      </div>
+
+      <form id="create-post-form">
+        <!-- Nome / Pseudônimo -->
+        <div class="form-group">
+          <label for="post-author">Seu Nome / Vulgo Sofrido:</label>
+          <div class="input-with-icon">
+            <span class="input-icon">👤</span>
+            <input type="text" id="post-author" placeholder="Ex: Carlinhos do Cheque Especial" required value="Zé Coitado">
+          </div>
+        </div>
+
+        <!-- Categoria e Gravidade -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="post-category">Departamento da Dor:</label>
+            <select id="post-category" required class="custom-select">
+              <option value="clt">💼 CLT & Escravidão</option>
+              <option value="boletos" selected>💸 Boletos & Falência</option>
+              <option value="amor">💔 Amor & Chifre</option>
+              <option value="transporte">🚌 Transporte Público</option>
+              <option value="estudante">🎓 Faculdade & TCC</option>
+              <option value="cotidiano">🤕 Maldades do Cotidiano</option>
+            </select>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="post-chaos">Nível de Caos (1 a 10):</label>
+            <div class="range-wrap">
+              <input type="range" id="post-chaos" min="1" max="10" value="8" step="1">
+              <span class="range-val" id="range-val-badge">8/10 🚨</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Título do Caos -->
+        <div class="form-group">
+          <label for="post-title">Título do Perrengue:</label>
+          <input type="text" id="post-title" placeholder="Ex: Minha marmita azedou e meu chefe pediu hora extra grátis" required maxlength="90">
+        </div>
+
+        <!-- Relato Completo -->
+        <div class="form-group">
+          <label for="post-story">O Relato Chocante (Capriche no drama):</label>
+          <textarea id="post-story" rows="4" placeholder="Conte os detalhes da humilhação... quem viu? quanto custou o prejuízo? o que doeu mais?" required maxlength="600"></textarea>
+          <div class="char-count"><span id="char-counter">0</span>/600 caracteres</div>
+        </div>
+
+        <!-- Tag Especial -->
+        <div class="form-group">
+          <label>Adicionar Selo de Gravidade:</label>
+          <div class="tag-selector">
+            <label class="tag-radio">
+              <input type="radio" name="dramaTag" value="Humilhação Pública" checked>
+              <span>🚨 Humilhação Pública</span>
+            </label>
+            <label class="tag-radio">
+              <input type="radio" name="dramaTag" value="Dano Financeiro Irreversível">
+              <span>💸 Prejuízo Irreparável</span>
+            </label>
+            <label class="tag-radio">
+              <input type="radio" name="dramaTag" value="Coração em Pedaços">
+              <span>💔 Trauma Amoroso</span>
+            </label>
+            <label class="tag-radio">
+              <input type="radio" name="dramaTag" value="Castigo Divino">
+              <span>⚡ Azar Lendário</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Rodapé do Modal -->
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="modal-cancel-btn">Cancelar</button>
+          <button type="submit" class="btn-primary-glow">
+            <span>😭 Publicar Minha Desgraça</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script da Aplicação -->
+  <script src="app.js"></script>
+</body>
+</html>
